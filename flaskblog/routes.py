@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
+"""Routes"""
+
+
 from flask import (
-    Flask,
     render_template,
     flash,
     url_for,
     redirect
 )
-from forms import LoginForm, RegistrationForm
-
-
-app = Flask(__name__)
-app.config['SECRET_KEY'] = '80149b55cdee8f6763268121b0f51e73'
+from flaskblog import app
+from flaskblog.forms import LoginForm, RegistrationForm
+from flaskblog.models import User, Post
 
 
 posts = [
@@ -53,14 +53,9 @@ def register():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        if form.email.data == 'admin@blog.com' and \
-            form.password.data == 'password':
+        if form.email.data == 'admin@blog.com' and form.password.data == 'password':
             flash(f'You have been logged in !', 'success')
             return redirect(url_for('home'))
         else:
             flash(f'Login failed. Check your creds.', 'danger')
     return render_template('login.html', title='Login', form=form)
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
